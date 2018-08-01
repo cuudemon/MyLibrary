@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:ignore="RtlSymmetry,HardcodedText,RtlHardcoded,ContentDescription,SpUsage,UselessParent">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_parent_rounded_corner_ads"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/feed_item_padding_left_right"
+            android:paddingRight="@dimen/feed_item_padding_left_right">
+
+            <LinearLayout
+                android:id="@+id/LinearLayout1"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/imIcon"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
+                    android:layout_marginRight="2.0dip"
+                    android:scaleType="fitCenter" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/feed_item_profile_info_padd">
+
+                <TextView
+                    android:id="@+id/tvTenUngDung"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="2.0dip"
+                    android:maxLines="1"
+                    android:text="Ten Ung Dung"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/feed_item_profile_name"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1px"
+                    android:background="#e5e5df" />
+
+                <TextView
+                    android:id="@+id/tvTacGia"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2.0dip"
+                    android:maxLines="1"
+                    android:text="TacGia"
+                    android:textColor="@color/timestampads"
+                    android:textSize="15dp" />
+
+                <RelativeLayout
+                    android:id="@+id/RelativeLayout1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tvMoTa"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginBottom="1.0dip"
+                        android:layout_marginTop="2.0dip"
+                        android:ellipsize="marquee"
+                        android:gravity="center_vertical"
+                        android:marqueeRepeatLimit="marquee_forever"
+                        android:maxLines="1"
+                        android:scrollHorizontally="true"
+                        android:singleLine="true"
+                        android:text="Mo Ta Ung Dung"
+                        android:textColor="@color/timestampads"
+                        android:textSize="@dimen/feed_item_timestamp" />
+                </RelativeLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorPrimaryDark" />
+    </LinearLayout>
+
+</LinearLayout>

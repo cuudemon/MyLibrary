@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Aloapp</string>
+    <string name="tentacgia">VAN TRAN QUANG</string>
+    <string name="placementID">placementID</string>
+
+
+    <string name="yes">EXIT</string>
+    <string name="no">CANCEL</string>
+    <string name="exitTile">Are you sure want to exit?</string>
+    <string name="exitTile_on">Download more useful applications?</string>
+    <string name="ads">Recommend</string>
+</resources>
