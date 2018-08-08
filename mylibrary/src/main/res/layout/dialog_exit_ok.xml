@@ -44,13 +44,17 @@
             android:layout_height="@dimen/focus_ads"
             android:layout_below="@+id/topMenu"
             android:orientation="vertical"
-            android:padding="@dimen/margin"
+            android:paddingTop="@dimen/margin"
+
+            android:paddingLeft="@dimen/margin"
+            android:paddingRight="@dimen/margin"
             android:visibility="gone">
 
             <ImageView
                 android:id="@+id/imFocus_Ads"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:scaleType="fitXY"
                 android:src="@mipmap/vip03" />
 
         </LinearLayout>
@@ -62,9 +66,7 @@
             android:layout_height="@dimen/banner_ads_height"
             android:layout_below="@+id/focus_ads"
             android:gravity="center"
-            android:paddingBottom="@dimen/margin"
-            android:paddingLeft="@dimen/margin"
-            android:paddingRight="@dimen/margin"
+            android:padding="@dimen/margin"
             android:visibility="gone">
 
 
@@ -126,7 +128,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.5"
-                android:background="@drawable/click_button"
+                android:background="@drawable/button_pressed"
                 android:gravity="center">
 
                 <TextView
