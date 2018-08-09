@@ -12,12 +12,15 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import net.vaoday.mylibrary.R;
 import net.vaoday.mylibrary.ads.ExitAds;
 
 
 public abstract class AloAppActivity extends AppCompatActivity {
     ExitAds ads;
     boolean isShow = true;
+    private static final int TIME_DELAY = 2000;
+    private static long back_pressed;
 
     protected abstract int getLayoutID();
 
@@ -54,6 +57,21 @@ public abstract class AloAppActivity extends AppCompatActivity {
             statusBar.getLayoutParams().height = statusBarHeight;
             statusBar.setBackgroundColor(color);
         }
+    }
+
+    protected void exitAppNoInternet() {
+
+        if (back_pressed + TIME_DELAY > System.currentTimeMillis()) {
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            System.exit(0);
+        } else {
+            Toast.makeText(this, R.string.back, Toast.LENGTH_SHORT).show();
+        }
+        back_pressed = System.currentTimeMillis();
+
     }
 
     protected void makeToast(String strToast) {

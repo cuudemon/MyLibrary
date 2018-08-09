@@ -9,4 +9,5 @@
     <string name="exitTile">Are you sure want to exit?</string>
     <string name="exitTile_on">Download more useful applications?</string>
     <string name="ads">Recommend</string>
+    <string name="back">Please click BACK again to exit!</string>
 </resources>

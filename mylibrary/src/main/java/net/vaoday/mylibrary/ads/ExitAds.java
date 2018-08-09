@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,6 +17,7 @@ import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -45,7 +47,6 @@ public class ExitAds {
     private AppAds getAdsObj;
     public static ArrayList<AppAds.AppsBean> ads2 = new ArrayList<AppAds.AppsBean>();
     public static ArrayList<AppAds.FocusAdsBean> mFocusAds = new ArrayList<AppAds.FocusAdsBean>();
-
     private Dialog dialogAdsFb;
 
 
@@ -56,6 +57,7 @@ public class ExitAds {
         dialogAdsFb.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialogAdsFb.setContentView(R.layout.dialog_exit_ok);
 
+        final boolean doubleBackToExitPressedOnce = false;
         if (Tools.isConnectingToInternet(mContext)) {
 
             if (getVersionName(mContext).equals("0")) {
@@ -135,8 +137,11 @@ public class ExitAds {
                                     @Override
                                     public void onClick(View view) {
                                         try {
-                                            openLinks(mContext, "fb://facewebmodal/f?href=" + mFocusAds.get(0).getAdsLink());
-                                        }catch (Exception e){
+                                            if (mFocusAds.get(0).getAsdType().equals("ads"))
+                                                openLinks(mContext, mFocusAds.get(0).getAdsLink());
+                                            else
+                                                openApps(mContext, mFocusAds.get(0).getPackageName());
+                                        } catch (Exception e) {
                                             Log.e("TAG", "catch in open FocusAds");
                                             exitApp(mContext);
                                         }
@@ -195,6 +200,7 @@ public class ExitAds {
             } catch (Exception e) {
                 Log.e("Lỗi khi get JSON", e.getMessage());
             }
+
         }
 
         LinearLayout btnYes = (LinearLayout) dialogAdsFb.findViewById(R.id.btnYes);
@@ -214,6 +220,7 @@ public class ExitAds {
                 dialogAdsFb.dismiss();
             }
         });
+
 
 //        nativeAd.setAdListener(new NativeAdListener() {
 //            @Override

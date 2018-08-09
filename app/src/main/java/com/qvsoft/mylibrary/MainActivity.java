@@ -1,6 +1,7 @@
 package com.qvsoft.mylibrary;
 
 import net.vaoday.mylibrary.activity.AloAppActivity;
+import net.vaoday.mylibrary.util.Tools;
 
 public class MainActivity extends AloAppActivity {
 
@@ -16,6 +17,9 @@ public class MainActivity extends AloAppActivity {
 
     @Override
     public void onBackPressed() {
-        exitDialog();
+        if (Tools.isConnectingToInternet(this))
+            exitDialog();
+        else
+            exitAppNoInternet();
     }
 }
