@@ -57,7 +57,6 @@ public class ExitAds {
         dialogAdsFb.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialogAdsFb.setContentView(R.layout.dialog_exit_ok);
 
-        final boolean doubleBackToExitPressedOnce = false;
         if (Tools.isConnectingToInternet(mContext)) {
 
             if (getVersionName(mContext).equals("0")) {
@@ -289,7 +288,7 @@ public class ExitAds {
 //        nativeAd.loadAd();
     }
 
-    private String getVersionName(Context mContext) {
+    public static String getVersionName(Context mContext) {
         PackageInfo pInfo = null;
         try {
             pInfo = mContext.getPackageManager().getPackageInfo(
@@ -306,7 +305,7 @@ public class ExitAds {
 
     }
 
-    private boolean isPackageInstalled(String packagename, Context context) {
+    public static boolean isPackageInstalled(String packagename, Context context) {
         PackageManager pm = context.getPackageManager();
         try {
             pm.getPackageInfo(packagename, PackageManager.GET_ACTIVITIES);

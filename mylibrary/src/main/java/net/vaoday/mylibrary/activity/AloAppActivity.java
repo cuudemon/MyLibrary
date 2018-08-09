@@ -143,4 +143,21 @@ public abstract class AloAppActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    protected void openApps(Context mContext, String packageName) {
+        Log.d("onClick Item", "click Quang Cao");
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse("market://details?id=" + packageName));
+        Log.v("namePakage", packageName);
+        mContext.startActivity(intent);
+    }
+
+
+    protected void openLinks(Context mContext, String link) {
+        Log.d("onClick Item", "click Quang Cao");
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(link));
+        Log.v("Link open", link);
+        mContext.startActivity(intent);
+    }
+
 }
