@@ -10,15 +10,29 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.gson.Gson;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+
 import net.vaoday.mylibrary.R;
+import net.vaoday.mylibrary.ads.AppAds;
 import net.vaoday.mylibrary.ads.ExitAds;
+import net.vaoday.mylibrary.util.Encoder;
+import net.vaoday.mylibrary.util.ListRandom;
+
+import java.util.ArrayList;
+
+import cz.msebera.android.httpclient.Header;
 
 
 public abstract class AloAppActivity extends AppCompatActivity {
     ExitAds ads;
-    boolean isShow = true;
     private static final int TIME_DELAY = 2000;
     private static long back_pressed;
 

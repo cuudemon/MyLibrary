@@ -12,6 +12,8 @@ public class MainActivity extends AloAppActivity {
 
     @Override
     protected void settingView() {
+//        if (Tools.isConnectingToInternet(this))
+
 
     }
 
