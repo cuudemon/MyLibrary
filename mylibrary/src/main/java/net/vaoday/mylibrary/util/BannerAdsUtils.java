@@ -35,7 +35,7 @@ public class BannerAdsUtils {
             MobileAds.initialize(mContext, Encoder.decrypt(mContext.getResources().getString(R.string.APP_ID)));
             final AdView mAdView = new AdView((Activity) mContext);
             mAdView.setAdSize(AdSize.SMART_BANNER);
-            mAdView.setAdUnitId(mContext.getResources().getString(R.string.BANNER_ID));
+            mAdView.setAdUnitId(Encoder.decrypt(mContext.getResources().getString(R.string.BANNER_ID)));
             AdRequest adRequest = new AdRequest.Builder().build();
             mAdView.loadAd(adRequest);
             mAdView.setAdListener(new AdListener() {
