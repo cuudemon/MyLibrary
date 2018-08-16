@@ -49,6 +49,7 @@ public class InterstitialUtils {
         }catch (Exception e){
             Log.e("TAG", "Catch in initInterstitial");
         }
+        loadInterstitialAd();
 
     }
 
