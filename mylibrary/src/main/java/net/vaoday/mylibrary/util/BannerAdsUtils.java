@@ -18,10 +18,19 @@ import net.vaoday.mylibrary.R;
 
 public class BannerAdsUtils {
 
-    private static AdView mAdView;
+    private static BannerAdsUtils sharedInstance;
 
-    public static void showBannerAdsLayout(Context mContext, int ID_LAYOUT) {
+    public static BannerAdsUtils getSharedInstance() {
+        if (sharedInstance == null) {
+            sharedInstance = new BannerAdsUtils();
+        }
+        return sharedInstance;
+    }
+
+    public void showBannerAdsLayout(Context mContext, int ID_LAYOUT) {
         try {
+
+            AdView mAdView;
             MobileAds.initialize(mContext, Encoder.decrypt(mContext.getResources().getString(R.string.APP_ID)));
             mAdView = new AdView(mContext);
             mAdView = ((Activity) mContext).findViewById(ID_LAYOUT);
@@ -36,11 +45,12 @@ public class BannerAdsUtils {
 
     }
 
-    public static void showBannerAdsNoLayout(Context mContext,
+    public void showBannerAdsNoLayout(Context mContext,
                                              Boolean isBottom, boolean isLeft) {
         try {
+            AdView mAdView;
             MobileAds.initialize(mContext, Encoder.decrypt(mContext.getResources().getString(R.string.APP_ID)));
-             mAdView = new AdView(mContext);
+            mAdView = new AdView(mContext);
             mAdView.setAdUnitId(Encoder.decrypt(mContext.getResources().getString(R.string.BANNER_ID)));
             mAdView.setAdSize(AdSize.BANNER);
             mAdView.loadAd(new AdRequest.Builder().build());
@@ -73,7 +83,6 @@ public class BannerAdsUtils {
         return lnAd;
 
     }
-
 
 
 }
