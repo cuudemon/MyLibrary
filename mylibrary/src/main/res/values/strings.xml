@@ -10,4 +10,8 @@
     <string name="exitTile_on">Download more useful applications?</string>
     <string name="ads">Recommend</string>
     <string name="back">Please click BACK again to exit!</string>
+
+    <string name="APP_ID">A</string>
+    <string name="BANNER_ID">B</string>
+    <string name="INTERSTITIAL_ID">C</string>
 </resources>

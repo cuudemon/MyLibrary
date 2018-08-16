@@ -8,6 +8,8 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 
+import net.vaoday.mylibrary.R;
+
 public class InterstitialUtils {
     private static InterstitialUtils sharedInstance;
     private InterstitialAd interstitialAd;
@@ -21,11 +23,11 @@ public class InterstitialUtils {
         return sharedInstance;
     }
 
-    public void init(Context mContext, String APP_ID, String FULL_ID) {
+    public void init(Context mContext) {
         try {
-            MobileAds.initialize(mContext, Encoder.decrypt(APP_ID));
+            MobileAds.initialize(mContext, Encoder.decrypt(mContext.getResources().getString(R.string.APP_ID)));
             interstitialAd = new InterstitialAd(mContext);
-            interstitialAd.setAdUnitId(Encoder.decrypt(FULL_ID));
+            interstitialAd.setAdUnitId(Encoder.decrypt(mContext.getResources().getString(R.string.INTERSTITIAL_ID)));
             interstitialAd.setAdListener(new AdListener() {
                 @Override
                 public void onAdClosed() {
