@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
@@ -27,26 +28,34 @@ public class BannerAdsUtils {
         return sharedInstance;
     }
 
-    public void showBannerAdsLayout(Context mContext, int ID_LAYOUT) {
+    public void showBannerAdsLayout(final Context mContext, final int ID_LAYOUT) {
         try {
 
-            AdView mAdView;
+
             MobileAds.initialize(mContext, Encoder.decrypt(mContext.getResources().getString(R.string.APP_ID)));
-            mAdView = new AdView(mContext);
-            mAdView = ((Activity) mContext).findViewById(ID_LAYOUT);
-            mAdView.setAdUnitId(Encoder.decrypt(mContext.getResources().getString(R.string.BANNER_ID)));
+            final AdView mAdView = new AdView((Activity) mContext);
             mAdView.setAdSize(AdSize.SMART_BANNER);
+            mAdView.setAdUnitId(mContext.getResources().getString(R.string.BANNER_ID));
             AdRequest adRequest = new AdRequest.Builder().build();
             mAdView.loadAd(adRequest);
+            mAdView.setAdListener(new AdListener() {
+                @Override
+                public void onAdLoaded() {
+                    ((LinearLayout) ((Activity) mContext).findViewById(ID_LAYOUT))
+                            .removeView(mAdView);
+                    ((LinearLayout) ((Activity) mContext).findViewById(ID_LAYOUT))
+                            .addView(mAdView);
+                }
+            });
         } catch (Exception e) {
-            Log.e("TAG", "Catch in showBannerAdsLayout");
+            e.printStackTrace();
         }
 
 
     }
 
     public void showBannerAdsNoLayout(Context mContext,
-                                             Boolean isBottom, boolean isLeft) {
+                                      Boolean isBottom, boolean isLeft) {
         try {
             AdView mAdView;
             MobileAds.initialize(mContext, Encoder.decrypt(mContext.getResources().getString(R.string.APP_ID)));
