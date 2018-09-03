@@ -3,6 +3,7 @@ package net.vaoday.mylibrary.ads;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -29,6 +30,8 @@ import net.vaoday.mylibrary.R;
 import net.vaoday.mylibrary.util.Encoder;
 import net.vaoday.mylibrary.util.ListRandom;
 import net.vaoday.mylibrary.util.Tools;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -63,141 +66,41 @@ public class ExitAds {
                 try {
                     url = Encoder
                             .decrypt("1V9eUE1cLIVyQzAS0OgJcCKzysEHdzn3O6M7R/8B1P0TYPrh4yT1x/D5Mmucy8An");
+                    getAds(url);
                 } catch (Exception e) {
                     Log.v("Lỗi", "Lỗi khi giải mã url vn");
                     e.printStackTrace();
+                }
+            } else if (getVersionName(mContext).equals("3")) {
+                if (getCountryName(mContext).equals("None")) {
+                    getCountryFromIP();
+                } else if (getCountryName(mContext).equals("Vietnam")) {
+                    try {
+                        url = Encoder
+                                .decrypt("1V9eUE1cLIVyQzAS0OgJcCKzysEHdzn3O6M7R/8B1P0TYPrh4yT1x/D5Mmucy8An");
+                        getAds(url);
+                    } catch (Exception e) {
+                        Log.v("Lỗi", "Lỗi khi giải mã url vn");
+                    }
+                } else {
+                    try {
+                        url = Encoder
+                                .decrypt("1V9eUE1cLIVyQzAS0OgJcCKzysEHdzn3O6M7R/8B1P2XMG0A3iPqj2YVJeW084KE");
+                        getAds(url);
+                    } catch (Exception e) {
+                        Log.v("Lỗi", "Lỗi khi giải mã url en");
+                        e.printStackTrace();
+                    }
                 }
             } else {
                 try {
                     url = Encoder
                             .decrypt("1V9eUE1cLIVyQzAS0OgJcCKzysEHdzn3O6M7R/8B1P2XMG0A3iPqj2YVJeW084KE");
+                    getAds(url);
                 } catch (Exception e) {
                     Log.v("Lỗi", "Lỗi khi giải mã url en");
                     e.printStackTrace();
                 }
-            }
-
-            try {
-                client = new AsyncHttpClient();
-                client.get(mContext, url, new AsyncHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                        String str = new String(responseBody);
-                        gson = new Gson();
-                        getAdsObj = gson.fromJson(str, AppAds.class);
-
-                        isLoaded = true;
-                        //new
-                        ArrayList<AppAds.AppsBean> temp = new ArrayList<AppAds.AppsBean>();
-                        ArrayList<AppAds.FocusAdsBean> tempFocusAds = new ArrayList<AppAds.FocusAdsBean>();
-
-                        tempFocusAds.addAll(getAdsObj.getFocusAds());
-                        temp.addAll(getAdsObj.getApps());
-
-                        Log.e("Tong so quang cao", getAdsObj.getApps().size() + "");
-                        Log.e("Tong so focus Ads", getAdsObj.getFocusAds().size() + "");
-
-                        int size = temp.size();
-                        int sizeFocusAds = tempFocusAds.size();
-                        mFocusAds.clear();
-                        ads2.clear();
-                        if (sizeFocusAds > 0) {
-                            int kFocus[] = new ListRandom().randomArr(sizeFocusAds);
-                            for (int j = 0; j < sizeFocusAds; j++) {
-                                if (tempFocusAds.get(kFocus[j]).getAsdType().equals("app")) {
-                                    if (isPackageInstalled(tempFocusAds.get(kFocus[j]).getPackageName(), mContext)) {
-                                        Log.v("Bo qua: ", tempFocusAds.get(kFocus[j]).getPackageName());
-                                    } else {
-                                        mFocusAds.add(new AppAds.FocusAdsBean(tempFocusAds.get(kFocus[j]).getAdsName(),
-                                                tempFocusAds.get(kFocus[j]).getAsdType(),
-                                                tempFocusAds.get(kFocus[j]).getPackageName(),
-                                                tempFocusAds.get(kFocus[j]).getAdsLink(),
-                                                tempFocusAds.get(kFocus[j]).getAdsBanner()));
-                                    }
-                                } else {
-                                    mFocusAds.add(new AppAds.FocusAdsBean(tempFocusAds.get(kFocus[j]).getAdsName(),
-                                            tempFocusAds.get(kFocus[j]).getAsdType(),
-                                            tempFocusAds.get(kFocus[j]).getPackageName(),
-                                            tempFocusAds.get(kFocus[j]).getAdsLink(),
-                                            tempFocusAds.get(kFocus[j]).getAdsBanner()));
-                                }
-                            }
-
-                            if (mFocusAds.size() > 0) {
-                                LinearLayout focus_ads = dialogAdsFb.findViewById(R.id.focus_ads);
-                                ImageView imFocus_Ads = dialogAdsFb.findViewById(R.id.imFocus_Ads);
-                                focus_ads.setVisibility(View.VISIBLE);
-                                Glide.with(mContext).load(mFocusAds.get(0).getAdsBanner())
-                                        .crossFade()
-                                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                        .into(imFocus_Ads);
-
-                                focus_ads.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        try {
-                                            if (mFocusAds.get(0).getAsdType().equals("ads"))
-                                                openLinks(mContext, mFocusAds.get(0).getAdsLink());
-                                            else
-                                                openApps(mContext, mFocusAds.get(0).getPackageName());
-                                        } catch (Exception e) {
-                                            Log.e("TAG", "catch in open FocusAds");
-                                            exitApp(mContext);
-                                        }
-
-                                    }
-                                });
-
-
-                            }
-
-                        }
-
-                        int k[] = new ListRandom().randomArr(size);
-                        for (int i = 0; i < temp.size(); i++) {
-                            if (isPackageInstalled(temp.get(k[i]).getPackageName(), mContext)) {
-                                Log.v("Bo qua: ", temp.get(k[i]).getPackageName());
-                            } else {
-                                ads2.add(new AppAds.AppsBean(temp.get(k[i]).getAppName(), temp.get(k[i]).getPackageName(),
-                                        temp.get(k[i]).getPublisher(), temp.get(k[i]).getDecription(), temp.get(k[i]).getAppAds(), temp.get(k[i]).getAppIcon()));
-                            }
-                        }
-
-                        if (ExitAds.isLoaded && ExitAds.ads2.size() > 0) {
-                            try {
-                                TextView tvAds = (TextView) dialogAdsFb.findViewById(R.id.tvAds);
-                                tvAds.setText(mContext.getResources().getString(R.string.exitTile_on));
-                                LinearLayout list = (LinearLayout) dialogAdsFb.findViewById(R.id.listApps);
-                                list.setVisibility(View.VISIBLE);
-                                RecyclerView listApps = (RecyclerView) dialogAdsFb.findViewById(R.id.recycler);
-                                AdapterAdsFb adapterAdsFb = new AdapterAdsFb(mContext, ads2);
-                                listApps.setHasFixedSize(false);
-                                LinearLayoutManager mLayoutManager = new LinearLayoutManager(mContext);
-                                mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-                                listApps.setAdapter(adapterAdsFb);
-                                listApps.setLayoutManager(mLayoutManager);
-                                listApps.addOnItemTouchListener(new RecyclerItemClickListener(mContext, new RecyclerItemClickListener.OnItemClickListener() {
-                                    @Override
-                                    public void onItemClick(View view, int position) {
-                                        openApps(mContext, ads2.get(position).getPackageName());
-                                    }
-                                }));
-
-                            } catch (Exception ex) {
-                                Log.e("catch Adapter recycler", ex.getMessage());
-                            }
-
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                        isLoaded = false;
-                    }
-                });
-
-            } catch (Exception e) {
-                Log.e("Lỗi khi get JSON", e.getMessage());
             }
 
         }
@@ -402,6 +305,199 @@ public class ExitAds {
         intent.setData(Uri.parse(link));
         Log.v("Link open", link);
         mContext.startActivity(intent);
+    }
+
+    public static String prefname = "MOBILE ADS LIBRARY";
+    public static String TAG_IS_FIRST_TIMES = "country_tag";
+
+    // SharePreferences
+    public static void saveCountryName(Context mContext, String value) {
+        SharedPreferences pre = mContext.getSharedPreferences(prefname, mContext.MODE_PRIVATE);
+        SharedPreferences.Editor editor = pre.edit();
+        editor.putString(TAG_IS_FIRST_TIMES, value);
+        editor.commit();
+        Log.e("save country_tag", value);
+    }
+
+    public static String getCountryName(Context mContext) {
+        SharedPreferences pre = mContext.getSharedPreferences(prefname, mContext.MODE_PRIVATE);
+        String value;
+        value = pre.getString(TAG_IS_FIRST_TIMES, "None");
+        Log.d("get country_tag", value + "");
+        return value;
+    }
+
+    private void getCountryFromIP() {
+        AsyncHttpClient client;
+        final String url1 = "http://www.ip-api.com/json";
+        client = new AsyncHttpClient();
+        client.get(url1, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                try {
+                    JSONObject obj = new JSONObject(new String(responseBody));
+                    String countryName = obj.getString("country");
+                    Log.e("countryName", countryName);
+
+                    if (countryName.equals("Vietnam")) {
+                        saveCountryName(mContext, "Vietnam");
+                        try {
+                            url = Encoder
+                                    .decrypt("1V9eUE1cLIVyQzAS0OgJcCKzysEHdzn3O6M7R/8B1P0TYPrh4yT1x/D5Mmucy8An");
+                            getAds(url);
+
+                        } catch (Exception e) {
+                            Log.v("Lỗi", "Lỗi khi giải mã url vn");
+                            e.printStackTrace();
+                        }
+
+                    } else {
+                        try {
+                            url = Encoder
+                                    .decrypt("1V9eUE1cLIVyQzAS0OgJcCKzysEHdzn3O6M7R/8B1P2XMG0A3iPqj2YVJeW084KE");
+                            getAds(url);
+                        } catch (Exception e) {
+                            Log.v("Lỗi", "Lỗi khi giải mã url en");
+                            e.printStackTrace();
+                        }
+                    }
+
+                } catch (Exception e) {
+                    Log.e("Catch getCountryFromIP", e.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+            }
+        });
+    }
+
+
+    private void getAds(String url) {
+        try {
+            client = new AsyncHttpClient();
+            client.get(mContext, url, new AsyncHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                    String str = new String(responseBody);
+                    gson = new Gson();
+                    getAdsObj = gson.fromJson(str, AppAds.class);
+
+                    isLoaded = true;
+                    //new
+                    ArrayList<AppAds.AppsBean> temp = new ArrayList<AppAds.AppsBean>();
+                    ArrayList<AppAds.FocusAdsBean> tempFocusAds = new ArrayList<AppAds.FocusAdsBean>();
+
+                    tempFocusAds.addAll(getAdsObj.getFocusAds());
+                    temp.addAll(getAdsObj.getApps());
+
+                    Log.e("Tong so quang cao", getAdsObj.getApps().size() + "");
+                    Log.e("Tong so focus Ads", getAdsObj.getFocusAds().size() + "");
+
+                    int size = temp.size();
+                    int sizeFocusAds = tempFocusAds.size();
+                    mFocusAds.clear();
+                    ads2.clear();
+                    if (sizeFocusAds > 0) {
+                        int kFocus[] = new ListRandom().randomArr(sizeFocusAds);
+                        for (int j = 0; j < sizeFocusAds; j++) {
+                            if (tempFocusAds.get(kFocus[j]).getAsdType().equals("app")) {
+                                if (isPackageInstalled(tempFocusAds.get(kFocus[j]).getPackageName(), mContext)) {
+                                    Log.v("Bo qua: ", tempFocusAds.get(kFocus[j]).getPackageName());
+                                } else {
+                                    mFocusAds.add(new AppAds.FocusAdsBean(tempFocusAds.get(kFocus[j]).getAdsName(),
+                                            tempFocusAds.get(kFocus[j]).getAsdType(),
+                                            tempFocusAds.get(kFocus[j]).getPackageName(),
+                                            tempFocusAds.get(kFocus[j]).getAdsLink(),
+                                            tempFocusAds.get(kFocus[j]).getAdsBanner()));
+                                }
+                            } else {
+                                mFocusAds.add(new AppAds.FocusAdsBean(tempFocusAds.get(kFocus[j]).getAdsName(),
+                                        tempFocusAds.get(kFocus[j]).getAsdType(),
+                                        tempFocusAds.get(kFocus[j]).getPackageName(),
+                                        tempFocusAds.get(kFocus[j]).getAdsLink(),
+                                        tempFocusAds.get(kFocus[j]).getAdsBanner()));
+                            }
+                        }
+
+                        if (mFocusAds.size() > 0) {
+                            LinearLayout focus_ads = dialogAdsFb.findViewById(R.id.focus_ads);
+                            ImageView imFocus_Ads = dialogAdsFb.findViewById(R.id.imFocus_Ads);
+                            focus_ads.setVisibility(View.VISIBLE);
+                            Glide.with(mContext).load(mFocusAds.get(0).getAdsBanner())
+                                    .crossFade()
+                                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                    .into(imFocus_Ads);
+
+                            focus_ads.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    try {
+                                        if (mFocusAds.get(0).getAsdType().equals("ads"))
+                                            openLinks(mContext, mFocusAds.get(0).getAdsLink());
+                                        else
+                                            openApps(mContext, mFocusAds.get(0).getPackageName());
+                                    } catch (Exception e) {
+                                        Log.e("TAG", "catch in open FocusAds");
+                                        exitApp(mContext);
+                                    }
+
+                                }
+                            });
+
+
+                        }
+
+                    }
+
+                    int k[] = new ListRandom().randomArr(size);
+                    for (int i = 0; i < temp.size(); i++) {
+                        if (isPackageInstalled(temp.get(k[i]).getPackageName(), mContext)) {
+                            Log.v("Bo qua: ", temp.get(k[i]).getPackageName());
+                        } else {
+                            ads2.add(new AppAds.AppsBean(temp.get(k[i]).getAppName(), temp.get(k[i]).getPackageName(),
+                                    temp.get(k[i]).getPublisher(), temp.get(k[i]).getDecription(), temp.get(k[i]).getAppAds(), temp.get(k[i]).getAppIcon()));
+                        }
+                    }
+
+                    if (ExitAds.isLoaded && ExitAds.ads2.size() > 0) {
+                        try {
+                            TextView tvAds = (TextView) dialogAdsFb.findViewById(R.id.tvAds);
+                            tvAds.setText(mContext.getResources().getString(R.string.exitTile_on));
+                            LinearLayout list = (LinearLayout) dialogAdsFb.findViewById(R.id.listApps);
+                            list.setVisibility(View.VISIBLE);
+                            RecyclerView listApps = (RecyclerView) dialogAdsFb.findViewById(R.id.recycler);
+                            AdapterAdsFb adapterAdsFb = new AdapterAdsFb(mContext, ads2);
+                            listApps.setHasFixedSize(false);
+                            LinearLayoutManager mLayoutManager = new LinearLayoutManager(mContext);
+                            mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+                            listApps.setAdapter(adapterAdsFb);
+                            listApps.setLayoutManager(mLayoutManager);
+                            listApps.addOnItemTouchListener(new RecyclerItemClickListener(mContext, new RecyclerItemClickListener.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(View view, int position) {
+                                    openApps(mContext, ads2.get(position).getPackageName());
+                                }
+                            }));
+
+                        } catch (Exception ex) {
+                            Log.e("catch Adapter recycler", ex.getMessage());
+                        }
+
+                    }
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                    isLoaded = false;
+                }
+            });
+
+        } catch (Exception e) {
+            Log.e("Lỗi khi get JSON", e.getMessage());
+        }
     }
 
 

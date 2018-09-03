@@ -46,6 +46,12 @@ public class BannerAdsUtils {
                     ((LinearLayout) ((Activity) mContext).findViewById(ID_LAYOUT))
                             .addView(mAdView);
                 }
+
+                @Override
+                public void onAdFailedToLoad(int i) {
+                    super.onAdFailedToLoad(i);
+
+                }
             });
         } catch (Exception e) {
             e.printStackTrace();
