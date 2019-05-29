@@ -14,4 +14,7 @@
     <string name="APP_ID">A</string>
     <string name="BANNER_ID">B</string>
     <string name="INTERSTITIAL_ID">C</string>
+
+    <string name="FB_BANNER_ID">A</string>
+    <string name="FB_INTERSTITIALS_ID">B</string>
 </resources>
