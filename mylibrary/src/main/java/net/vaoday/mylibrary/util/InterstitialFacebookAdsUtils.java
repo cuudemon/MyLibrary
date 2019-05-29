@@ -74,6 +74,18 @@ public class InterstitialFacebookAdsUtils {
 
     }
 
+    public void showInterstitialAd(AdCloseListener adCloseListener) {
+        if (canShowInterstitialAd()) {
+            isReloaded = false;
+            this.adCloseListener = adCloseListener;
+            interstitialAd.show();
+        } else {
+            loadInterstitialAd();
+            adCloseListener.onAdClosed();
+        }
+
+    }
+
     private void loadInterstitialAd() {
         if (interstitialAd != null && !interstitialAd.isAdLoaded()) {
             interstitialAd.loadAd();
