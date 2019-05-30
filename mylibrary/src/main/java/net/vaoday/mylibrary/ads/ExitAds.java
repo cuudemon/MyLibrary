@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -427,7 +428,7 @@ public class ExitAds {
                             ImageView imFocus_Ads = dialogAdsFb.findViewById(R.id.imFocus_Ads);
                             focus_ads.setVisibility(View.VISIBLE);
                             Glide.with(mContext).load(mFocusAds.get(0).getAdsBanner())
-                                    .crossFade()
+                                    .transition(new DrawableTransitionOptions().crossFade())
                                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                                     .into(imFocus_Ads);
 

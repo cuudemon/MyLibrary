@@ -9,6 +9,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 
 
 import net.vaoday.mylibrary.R;
@@ -39,7 +40,7 @@ public class AdapterAdsFb extends RecyclerView.Adapter<AdapterAdsFb.BackgroundHo
     @Override
     public void onBindViewHolder(BackgroundHolder holder, int position) {
         Glide.with(mContext).load(mAdsItem.get(position).getAppAds())
-                .crossFade()
+                .transition(new DrawableTransitionOptions().crossFade())
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.imageView);
     }
