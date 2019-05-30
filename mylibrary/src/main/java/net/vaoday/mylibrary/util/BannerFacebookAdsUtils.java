@@ -17,6 +17,8 @@ import net.vaoday.mylibrary.R;
 public class BannerFacebookAdsUtils {
     private static BannerFacebookAdsUtils sharedInstance;
 
+    private AdView adView;
+
     public static BannerFacebookAdsUtils getSharedInstance() {
         if (sharedInstance == null) {
             sharedInstance = new BannerFacebookAdsUtils();
@@ -24,10 +26,16 @@ public class BannerFacebookAdsUtils {
         return sharedInstance;
     }
 
+    public void adViewDestroy(){
+        if (adView != null) {
+            adView.destroy();
+        }
+    }
+
     public void showFBBannerAds(final Context mContext, final int bannerLayout) {
         try {
             AudienceNetworkAds.initialize(mContext);
-            final AdView adView = new AdView(mContext, mContext.getResources().getString(R.string.FB_BANNER_ID), AdSize.BANNER_HEIGHT_50);
+             adView = new AdView(mContext, mContext.getResources().getString(R.string.FB_BANNER_ID), AdSize.BANNER_HEIGHT_50);
             final LinearLayout adContainer = (LinearLayout) ((Activity) mContext).findViewById(bannerLayout);
             adView.loadAd();
 

@@ -25,6 +25,12 @@ public class InterstitialFacebookAdsUtils {
         return sharedInstance;
     }
 
+    public void interstitialAdDestroy(){
+        if (interstitialAd != null) {
+            interstitialAd.destroy();
+        }
+    }
+
     public void init(Context mContext) {
         try {
             AudienceNetworkAds.initialize(mContext);
