@@ -73,6 +73,7 @@ public class InterstitialFacebookAdsUtils {
                 }
             });
 
+            loadInterstitialAd();
 
         } catch (Exception ex) {
             Log.e("Catch in init FB Inters", ex.getMessage() + " a");
